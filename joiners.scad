@@ -477,6 +477,8 @@ module _check_params(h,w,l,a,dmnd_width,guide_width,force) {
     assert(w>=0.4*h, str("`w` must be at least 0.4*`h``.",v));
     assert(w<=0.6*h, str("`w` must be less than or equal to 0.6*`h`.",v));
     assert(is_undef(l) || l>=guide_width, str("`l` must be at least `2*(h/2-w/3)*tan(a)`.",v));
+    assert(a>=15, str("`a` should be greater than or equal to 15.",v));
+    assert(a<=60, str("`a` should be less than or equal to 60.",v));
   }
 }
 
