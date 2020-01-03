@@ -79,7 +79,7 @@ module half_joiner_clear(h=20, w=10, a=30, clearance=0.01, overlap=0.01, force=f
       // Diamonds with offset.
       fwd(overlap/2) intersection() {
         cube([w+clearance, dmnd_width+overlap, dmnd_height], center=true);
-        scale([w+clearance, dmnd_width/2+overlap/2, (dmnd_width/2+overlap/2)/tan(30)])
+        scale([w+clearance, dmnd_width/2+overlap/2, (dmnd_width/2+overlap/2)/tan(a)])
           xrot(45) cube(size=[1,sqrt(2),sqrt(2)], center=true);
       }
 
@@ -121,9 +121,9 @@ module half_joiner(h, w, l, a=30, clearance=0.01, overlap=0.01, screwsize=undef,
   guide_width = 2*(dmnd_height/2-guide_size)*tan(a);
 
   w=is_undef(w)?h/2:w;
-  l=is_undef(l)?w:l;
+  l=is_undef(l)?guide_width:l;
 
-  _check_params(h=h,w=w,l=l,a=a,dmnd_width=dmnd_width,force=force);
+  _check_params(h=h,w=w,l=l,a=a,dmnd_width=dmnd_width,guide_width=guide_width,force=force);
 
   union() {
     difference() {
@@ -146,7 +146,7 @@ module half_joiner(h, w, l, a=30, clearance=0.01, overlap=0.01, screwsize=undef,
                 cube([w/3-slop*2, dmnd_width+(overlap+0.005), dmnd_height], center=true);
                 scale([w/3-slop*2,
                     dmnd_width/2+overlap/2+0.005,
-                    (dmnd_width/2+overlap/2+0.005)/tan(30)])
+                    (dmnd_width/2+overlap/2+0.005)/tan(a)])
                   xrot(45) cube(size=[1,sqrt(2),sqrt(2)], center=true);
               }
 
@@ -166,8 +166,8 @@ module half_joiner(h, w, l, a=30, clearance=0.01, overlap=0.01, screwsize=undef,
             }
 
             // Blunt point of tab.
-            back(guide_width/2+2)
-              cube(size=[h*2,4,h*2], center=true);
+            back(guide_width/2+3*tan(a))
+              cube(size=[h*2,6*tan(a),h*2], center=true);
           }
         }
 
@@ -473,7 +473,7 @@ module _check_params(h,w,l,a,dmnd_width,guide_width,force) {
   assert(!(is_undef(h) && is_undef(w)), "I need you to provide `h` or `w` (or both).");
   if(!force) {
     m=" Pass `force=true` to skip this check.";
-    v=str(" (w=",w," h=",h," a=",a," l=",l," 2*(h/2-w/3)*tan(a)=",guide_width,")",m);
+    v=str(" (w=",w,", h=",h,", a=",a,", l=",l,", 2*(h/2-w/3)*tan(a)=",guide_width,")",m);
     assert(w>=0.4*h, str("`w` must be at least 0.4*`h``.",v));
     assert(w<=0.6*h, str("`w` must be less than or equal to 0.6*`h`.",v));
     assert(is_undef(l) || l>=guide_width, str("`l` must be at least `2*(h/2-w/3)*tan(a)`.",v));
