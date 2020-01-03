@@ -159,7 +159,7 @@ module half_joiner(h, w, l, a=30, clearance=0.01, overlap=0.01, screwsize=undef,
 
                   // Snap ridge.
                   scale([0.25, 0.5, 1]) zrot(45)
-                    cube(size=[guide_size/sqrt(2), guide_size/sqrt(2), dmnd_width-2*slop],
+                    cube(size=[guide_size/sqrt(2), guide_size/sqrt(2), 0.6*dmnd_height-2*slop],
                         center=true);
                 }
               }
